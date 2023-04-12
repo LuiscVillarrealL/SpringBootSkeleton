@@ -2,20 +2,26 @@ package com.lcvl.springskel.controller;
 
 import com.lcvl.springskel.dto.ExampleDto;
 import com.lcvl.springskel.model.Example;
+import com.lcvl.springskel.response.ResponseHandler;
+import com.lcvl.springskel.response.ResponseObj;
 import com.lcvl.springskel.services.ExampleService;
 import com.lcvl.springskel.util.mapper.ExampleMapper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -51,8 +57,9 @@ public class ExampleController {
    *
    * @return the examples
    */
+
   @GetMapping("/examples")
-  public List<ExampleDto> getExamples() {
+  public ResponseEntity<Object> getExamples() {
 
     List<ExampleDto> exampleDtoList = new ArrayList<>();
     Collection<Example> exampleList = new ArrayList<>();
@@ -62,7 +69,9 @@ public class ExampleController {
       exampleDtoList.add(exampleMapper.exampleModelToDto(example));
     }
 
-    return exampleDtoList;
+    // return ResponseHandler.generateResponse("Examples: ", HttpStatus.OK, exampleDtoList);
+    return ResponseHandler
+        .generateResponse(new ResponseObj(HttpStatus.OK, new Date(), "Examples: "), exampleDtoList);
   }
 
   /**
@@ -71,22 +80,73 @@ public class ExampleController {
    * @return the hello world
    */
   @GetMapping("/hello")
-  public String getHelloWorld() {
+  public ResponseEntity<Object> getHelloWorld() {
 
-    return "Hello WOrld";
+    return ResponseHandler
+        .generateResponse(new ResponseObj(HttpStatus.OK, new Date(), "Hello WOrld"), "Hello WOrld");
   }
 
   /**
    * Creates the user.
    *
    * @param example the example
+   * @return the response entity
    */
   @PostMapping("/create")
-  public void createUser(@RequestBody @Valid ExampleDto example) {
+  public ResponseEntity<Object> createExample(@RequestBody @Valid ExampleDto example) {
 
     example.setId(0);
 
     exampleService.save(exampleMapper.exampleDtoToModel(example));
+
+    return ResponseHandler
+        .generateResponse(new ResponseObj(HttpStatus.OK, new Date(), "User created"), "");
+
+  }
+
+  /**
+   * Find example.
+   *
+   * @param id the id
+   * @return the response entity
+   */
+  @GetMapping("/example/{id}")
+  public ResponseEntity<Object> findExample(@PathVariable int id) {
+
+    return ResponseHandler.generateResponse(
+        new ResponseObj(HttpStatus.OK, new Date(), "User found"),
+        exampleMapper.exampleModelToDto(exampleService.get(id)));
+
+  }
+
+  /**
+   * Update user.
+   *
+   * @param id the id
+   * @return the response entity
+   */
+  @PostMapping("/delete/{id}")
+  public ResponseEntity<Object> updateUser(@PathVariable int id) {
+
+    exampleService.delete(id);
+
+    return ResponseHandler
+        .generateResponse(new ResponseObj(HttpStatus.OK, new Date(), "User deleted"), "");
+  }
+
+  /**
+   * Update example.
+   *
+   * @param example the example
+   * @return the response entity
+   */
+  @PostMapping("/update")
+  public ResponseEntity<Object> updateExample(@RequestBody @Valid ExampleDto example) {
+
+    exampleService.save(exampleMapper.exampleDtoToModel(example));
+
+    return ResponseHandler
+        .generateResponse(new ResponseObj(HttpStatus.OK, new Date(), "User updated"), "");
 
   }
 
