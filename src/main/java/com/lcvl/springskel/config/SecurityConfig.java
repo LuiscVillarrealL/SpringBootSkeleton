@@ -17,7 +17,7 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-  
+
   private static final String[] AUTH_WHITELIST = {
       // -- Swagger UI v2
       "/v2/api-docs",
@@ -32,8 +32,8 @@ public class SecurityConfig {
       "/swagger-ui/**",
       "/actuator/**"
       // other public endpoints of your API may be appended to this array
-};
-  
+  };
+
   /**
    * Security filter chain.
    *
@@ -54,11 +54,9 @@ public class SecurityConfig {
         .httpBasic(withDefaults())
         .formLogin(withDefaults());
     // @formatter:on
-    
-    http
-    .csrf()
-    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-    .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler());
+
+    http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler());
     return http.build();
   }
 
