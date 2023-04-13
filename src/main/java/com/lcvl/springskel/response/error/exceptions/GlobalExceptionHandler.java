@@ -41,26 +41,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       WebRequest request) {
 
     return new ResponseEntity<>(
-        createError(HttpStatus.NOT_FOUND, ex.getMessage(), request, "not found"),
+        createError(HttpStatus.NOT_FOUND, ex, request, "not found"),
         HttpStatus.NOT_FOUND);
   }
 
-  /**
-   * Create error.
-   *
-   * @param status the status
-   * @param ex the ex
-   * @param request the request
-   * @return the api error
-   */
-  private ApiError createError(HttpStatus status, String ex, WebRequest request, String message) {
+
+  private ApiError createError(HttpStatus status, Exception ex, WebRequest request, String message) {
 
     ApiError error = new ApiError();
 
     error.setStatus(status);
     error.setTimestamp(new Date());
-    error.setDebugMessage(ex);
-    error.setMessage(ex);
+    error.setDebugMessage(ex.getMessage());
+    error.setMessage(ex.toString());
 
     return error;
   }
@@ -77,7 +70,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       WebRequest request) {
 
     return new ResponseEntity<>(
-        createError(HttpStatus.NOT_FOUND, ex.getMessage(), request, "No data found"),
+        createError(HttpStatus.NOT_FOUND, ex, request, "No data found"),
         HttpStatus.NOT_FOUND);
   }
 
@@ -93,7 +86,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       InvalidDataAccessApiUsageException ex, WebRequest request) {
 
     return new ResponseEntity<>(
-        createError(HttpStatus.METHOD_NOT_ALLOWED, ex.getMessage(), request, "Error"),
+        createError(HttpStatus.METHOD_NOT_ALLOWED, ex, request, "Error"),
         HttpStatus.METHOD_NOT_ALLOWED);
   }
 
@@ -112,7 +105,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     List<String> errors = ex.getBindingResult().getFieldErrors().stream()
         .map(x -> x.getDefaultMessage()).collect(Collectors.toList());
 
-    ApiError error = createError(HttpStatus.BAD_REQUEST, ex.getMessage(), request, "Error");
+    ApiError error = createError(HttpStatus.BAD_REQUEST, ex, request, "Error");
 
     error.setSubErrors(errors);
 

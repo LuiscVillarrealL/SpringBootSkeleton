@@ -1,7 +1,5 @@
 package com.lcvl.springskel.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,22 +12,21 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * The Class example.
+ * The Class example2.
  */
 @ToString
 @Getter
 @Setter
-@Entity(name = "example")
+@Entity(name = "example2")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
-public class Example {
+public class Example2 {
 
   /** The id. */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private long id;
+  private Long id;
 
   /** The user name. */
   @Column(name = "user_name", unique = true)
@@ -41,6 +38,6 @@ public class Example {
 
   /** The number. */
   @Column(name = "number")
-  private Long number;
+  private int number;
 
 }

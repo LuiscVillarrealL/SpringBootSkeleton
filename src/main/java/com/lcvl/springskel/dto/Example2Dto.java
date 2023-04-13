@@ -5,10 +5,10 @@ import lombok.Data;
 
 // TODO: Auto-generated Javadoc
 /**
- * Instantiates a new example dto.
+ * Instantiates a new example 2 dto.
  */
 @Data
-public class ExampleDto {
+public class Example2Dto {
 
   /** The id. */
   @Schema(name = "id")
