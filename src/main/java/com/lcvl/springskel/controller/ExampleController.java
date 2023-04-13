@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
  * The Class ExampleController.
  */
 @RestController
-@RequestMapping("/example")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ExampleController {
 
@@ -111,7 +111,7 @@ public class ExampleController {
    * @return the response entity
    */
   @GetMapping("/example/{id}")
-  public ResponseEntity<Object> findExample(@PathVariable int id) {
+  public ResponseEntity<Object> findExample(@PathVariable long id) {
 
     return ResponseHandler.generateResponse(
         new ResponseObj(HttpStatus.OK, new Date(), "User found"),
@@ -126,7 +126,7 @@ public class ExampleController {
    * @return the response entity
    */
   @PostMapping("/delete/{id}")
-  public ResponseEntity<Object> updateUser(@PathVariable int id) {
+  public ResponseEntity<Object> updateUser(@PathVariable long id) {
 
     exampleService.delete(id);
 
@@ -147,6 +147,21 @@ public class ExampleController {
 
     return ResponseHandler
         .generateResponse(new ResponseObj(HttpStatus.OK, new Date(), "User updated"), "");
+
+  }
+
+  /**
+   * Find example by username.
+   *
+   * @param username the username
+   * @return the response entity
+   */
+  @GetMapping("/user/{username}")
+  public ResponseEntity<Object> findExampleByUsername(@PathVariable String username) {
+
+    return ResponseHandler.generateResponse(
+        new ResponseObj(HttpStatus.OK, new Date(), "User found"),
+        exampleMapper.exampleModelToDto(exampleService.findByUsername(username)));
 
   }
 

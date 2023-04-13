@@ -2,11 +2,16 @@ package com.lcvl.springskel.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,33 +19,27 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * The Class example.
+ * The Class ExampleOneToOne.
  */
 @ToString
 @Getter
 @Setter
-@Entity(name = "example")
+@Entity(name = "example_one_to_one")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
-public class Example {
-
-  /** The id. */
+public class ExampleOneToOne {
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private long id;
-
-  /** The user name. */
-  @Column(name = "user_name", unique = true)
-  private String userName;
-
-  /** The first name. */
-  @Column(name = "first_name")
-  private String firstName;
-
-  /** The number. */
-  @Column(name = "number")
-  private Long number;
+  private Long id;
+  
+  @Column(name = "name")
+  private String name;
+  
+  @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+  @MapsId
+  @JoinColumn(name = "example_id")
+  private Example example;
 
 }

@@ -30,21 +30,22 @@ public interface ExampleService {
    * @param id the id
    * @return the example
    */
-  Example get(int id);
+  Example get(Long id);
 
   /**
    * Delete.
    *
    * @param id the id
    */
-  void delete(int id);
+  void delete(Long id);
 
   /**
-   * Gets the by username.
+   * Finds the by username.
    *
    * @param username the username
    * @return the by username
    */
-  Example getByUsername(String username);
+  Example findByUsername(String username);
+
 
 }

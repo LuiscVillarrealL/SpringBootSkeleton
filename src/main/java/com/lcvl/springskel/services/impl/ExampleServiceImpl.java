@@ -1,7 +1,7 @@
 package com.lcvl.springskel.services.impl;
 
-import com.lcvl.springskel.dao.ExampleDao;
 import com.lcvl.springskel.model.Example;
+import com.lcvl.springskel.repository.ExampleRepo;
 import com.lcvl.springskel.response.error.exceptions.ActionErrorException;
 import com.lcvl.springskel.response.error.exceptions.ExampleNotFoundException;
 import com.lcvl.springskel.response.error.exceptions.NoDataFoundException;
@@ -26,18 +26,18 @@ import lombok.extern.slf4j.Slf4j;
 public class ExampleServiceImpl implements ExampleService {
 
   // private static final Logger log = LoggerFactory.getLogger(ExampleService.class);
-  private ExampleDao exampleDao;
+  private ExampleRepo exampleRepo;
 
   @Autowired
-  public ExampleServiceImpl(ExampleDao exampleDao) {
-    this.exampleDao = exampleDao;
+  public ExampleServiceImpl(ExampleRepo exampleRepo) {
+    this.exampleRepo = exampleRepo;
   }
 
   @Override
   public void save(Example example) {
 
     log.info("Saving example:" + example.getUserName());
-    exampleDao.save(example);
+    exampleRepo.save(example);
 
   }
 
@@ -45,7 +45,7 @@ public class ExampleServiceImpl implements ExampleService {
   public Collection<Example> list() {
     log.info("Fetching examples");
 
-    Collection<Example> examples = exampleDao.findAll().stream().toList();
+    Collection<Example> examples = exampleRepo.findAll().stream().toList();
 
     if (examples.isEmpty()) {
       throw new NoDataFoundException();
@@ -55,10 +55,10 @@ public class ExampleServiceImpl implements ExampleService {
   }
 
   @Override
-  public Example get(int id) {
+  public Example get(Long id) {
     log.info("Searching examples:" + id);
 
-    Example example = exampleDao.findById(id);
+    Example example = exampleRepo.getReferenceById(id);
 
     if (ObjectUtils.isEmpty(example)) {
       throw new ExampleNotFoundException("Example " + id + "not found");
@@ -69,13 +69,13 @@ public class ExampleServiceImpl implements ExampleService {
   }
 
   @Override
-  public void delete(int id) {
+  public void delete(Long id) {
 
     log.info("deleting example: " + id);
 
     try {
       
-      exampleDao.deleteById(id);
+      exampleRepo.deleteById(id);
       
     } catch (InvalidDataAccessApiUsageException e) {
 
@@ -85,11 +85,11 @@ public class ExampleServiceImpl implements ExampleService {
   }
 
   @Override
-  public Example getByUsername(String username) {
+  public Example findByUsername(String username) {
 
     log.info("Searching by username = " + username);
 
-    Example example = exampleDao.findByUsername(username);
+    Example example = exampleRepo.findByUserName(username);
 
     if (ObjectUtils.isEmpty(example)) {
       throw new ExampleNotFoundException("Example " + username + "not found");
